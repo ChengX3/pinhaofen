@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026互助集分</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #5B8DEF;
+            --primary-light: #E8F0FE;
+            --success: #34C759;
+            --success-light: #E8F8ED;
+            --warning: #FF9500;
+            --warning-light: #FFF4E5;
+            --danger: #FF3B30;
+            --danger-light: #FFEBEA;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-500: #6B7280;
+            --gray-700: #374151;
+            --gray-900: #111827;
+            --white: #FFFFFF;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 32px 24px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: var(--gray-500);
+            margin-top: 8px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+
+        .type-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .type-btn {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .type-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .type-btn:active {
+            transform: scale(0.98);
+        }
+
+        .type-btn .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .type-btn.team .icon {
+            background: var(--primary-light);
+        }
+
+        .type-btn.person .icon {
+            background: var(--warning-light);
+        }
+
+        .type-btn .content h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .type-btn .content p {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .info-card {
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .target-score {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .info-text {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #4A7DE0;
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .btn-outline {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-200);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--gray-300);
+            background: var(--gray-50);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-700);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-300);
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+            margin-top: 6px;
+        }
+
+        .form-hint.highlight {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .radio-item {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-item input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-item label {
+            display: block;
+            padding: 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            background: var(--white);
+            transition: all 0.2s;
+        }
+
+        .radio-item input:checked + label {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius-sm);
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            background: var(--gray-50);
+            transition: all 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .upload-area.has-image {
+            padding: 16px;
+            background: var(--white);
+        }
+
+        .upload-area img {
+            max-width: 180px;
+            max-height: 180px;
+            border-radius: 8px;
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .upload-area p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        .type-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        .type-indicator.team {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .type-indicator.person {
+            background: var(--warning-light);
+            color: var(--warning);
+        }
+
+        .status-card {
+            text-align: center;
+            padding: 32px 24px;
+        }
+
+        .status-card.pending {
+            background: var(--primary-light);
+        }
+
+        .status-card.matched {
+            background: var(--success-light);
+        }
+
+        .uuid-display {
+            background: var(--white);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            font-family: 'SF Mono', 'Consolas', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 16px 0;
+            word-break: break-all;
+            color: var(--gray-700);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .match-result {
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--success);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+        }
+
+        .match-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--success);
+            margin: 16px 0;
+        }
+
+        .match-qrcode {
+            padding: 16px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            display: inline-block;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .match-qrcode img {
+            max-width: 220px;
+            max-height: 220px;
+            border-radius: 8px;
+        }
+
+        .countdown {
+            font-size: 0.85rem;
+            color: var(--gray-500);
+            margin-top: 12px;
+        }
+
+        .error-msg {
+            background: var(--danger-light);
+            color: var(--danger);
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        /* 查询页面 */
+        .query-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .query-input-group .form-input {
+            flex: 1;
+        }
+
+        .query-input-group .btn {
+            flex: none;
+            padding: 14px 24px;
+        }
+
+        .query-result {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .query-result.pending {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .query-result.matched {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .query-result.error {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .query-result h4 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .query-result p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* 公告弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            max-width: 420px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            font-size: 1.5rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-body p {
+            margin-bottom: 12px;
+            color: var(--gray-700);
+        }
+
+        .modal-body ul {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+            color: var(--gray-700);
+        }
+
+        .announcement-tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .back-btn {
+            margin-top: 12px;
+        }
+
+        .view-match-btn {
+            margin-top: 12px;
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .view-match-btn:hover {
+            background: #2DB84E;
+        }
+
+        /* 页面过渡动画 */
+        .page.active {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 公告弹窗 -->
+    <div id="announcement-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>公告</h3>
+                <button class="modal-close" onclick="closeAnnouncement()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <span class="announcement-tag">重要通知</span>
+                <p><strong>系统开源免费 请勿付费使用！开源地址：<a href="https://github.com/ChengX3/pinhaofen">拼好分</a></strong></p>
+                <p>使用说明：</p>
+                <ul>
+                    <li>选择你的类型：队伍找人 或 人找队伍</li>
+                    <li>输入你当前的分数</li>
+                    <li>选择匹配模式（精确/模糊）</li>
+                    <li>上传你的邀请二维码</li>
+                    <li>挂机等待为你匹配合适的伙伴</li>
+                </ul>
+                <p><strong>注意事项：</strong></p>
+                <ul>
+                    <li>请从ZFB活动中保存二维码，仅限活动二维码！</li>
+                    <li>匹配成功后请尽快完成互助</li>
+                    <li>请妥善保存你的 UUID，可用于查询匹配状态</li>
+                    <li>仅供娱乐！</li>
+                </ul>
+                <button class="btn btn-primary" onclick="closeAnnouncement()" style="width: 100%;">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>拼好分</h1>
+            <p>ZFB芝麻集分</p>
+        </div>
+
+        <!-- 首页 - 选择类型 -->
+        <div id="page-home" class="page active">
+            <div class="card">
+                <h2 class="card-title">选择你的类型</h2>
+                <div class="type-selector">
+                    <div class="type-btn team" onclick="selectType('team')">
+                        <div class="icon">👥</div>
+                        <div class="content">
+                            <h3>队伍找人</h3>
+                            <p>我有队伍，需要找人凑分</p>
+                        </div>
+                    </div>
+                    <div class="type-btn person" onclick="selectType('person')">
+                        <div class="icon">🙋</div>
+                        <div class="content">
+                            <h3>人找队伍</h3>
+                            <p>我是个人，需要找队伍加入</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="info-card">
+                    <p style="margin-bottom: 12px; color: var(--gray-500);">目标分数</p>
+                    <span class="target-score" id="target-score">2026</span>
+                    <p class="info-text">
+                        精确匹配：双方分数之和 = 2026<br>
+                        模糊匹配：双方分数之和在 2024-2028 之间
+                    </p>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="showAnnouncement()">查看公告</button>
+                    <button class="btn btn-secondary" onclick="showPage('query')">查询状态</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 查询页 -->
+        <div id="page-query" class="page">
+            <div class="card">
+                <h2 class="card-title">查询匹配状态</h2>
+                <div class="form-group">
+                    <label class="form-label">输入你的 UUID</label>
+                    <div class="query-input-group">
+                        <input type="text" class="form-input" id="query-uuid-input" placeholder="xxxx-xxxx-xxxx-xxxx">
+                        <button class="btn btn-primary" onclick="queryStatus()">查询</button>
+                    </div>
+                    <p class="form-hint">UUID 在提交匹配请求后会显示，请妥善保存</p>
+                </div>
+                <div id="query-result-container"></div>
+                <button class="btn btn-secondary back-btn" onclick="goHome()" style="width: 100%;">返回首页</button>
+            </div>
+        </div>
+
+        <!-- 表单页 -->
+        <div id="page-form" class="page">
+            <div class="card">
+                <div class="type-indicator" id="form-type-indicator">队伍找人</div>
+                <h2 class="card-title">填写信息</h2>
+
+                <div id="error-container"></div>
+
+                <div class="form-group">
+                    <label class="form-label">当前分数</label>
+                    <input type="number" class="form-input" id="score-input" placeholder="请输入你的分数" min="0" max="2026">
+                    <p class="form-hint highlight" id="need-score-hint"></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">匹配模式</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" name="match-mode" id="mode-exact" value="exact" checked>
+                            <label for="mode-exact">精确匹配</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" name="match-mode" id="mode-fuzzy" value="fuzzy">
+                            <label for="mode-fuzzy">模糊匹配</label>
+                        </div>
+                    </div>
+                    <p class="form-hint">选择模糊匹配时，只有双方都选择模糊才会进行模糊匹配</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">上传二维码</label>
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('qrcode-input').click()">
+                        <div id="upload-placeholder">
+                            <div class="upload-icon">📷</div>
+                            <p>点击上传二维码图片</p>
+                        </div>
+                        <img id="qrcode-preview" style="display: none;">
+                    </div>
+                    <input type="file" id="qrcode-input" accept="image/*" style="display: none;" onchange="handleImageUpload(this)">
+                    <p class="form-hint">请上传你的邀请二维码，匹配成功后对方将看到此二维码</p>
+                </div>
+
+                <button class="btn btn-primary" id="submit-btn" onclick="submitForm()" disabled style="width: 100%;">提交</button>
+                <button class="btn btn-secondary back-btn" onclick="goHome()" style="width: 100%;">返回</button>
+            </div>
+        </div>
+
+        <!-- 等待页 -->
+        <div id="page-waiting" class="page">
+            <div class="card status-card pending">
+                <h2 class="card-title" style="text-align: center;">等待匹配中...</h2>
+                <div class="spinner"></div>
+                <p style="color: var(--gray-500);">你的UUID</p>
+                <div class="uuid-display" id="user-uuid"></div>
+                <p class="countdown" id="countdown-text">30秒后自动刷新</p>
+            </div>
+            <button class="btn btn-secondary" onclick="goHome()" style="width: 100%;">取消并返回</button>
+        </div>
+
+        <!-- 成功页 -->
+        <div id="page-success" class="page">
+            <div class="card status-card matched">
+                <div class="match-result">
+                    <div class="success-icon">✓</div>
+                    <h2 class="card-title" style="text-align: center;">匹配成功！</h2>
+                    <p style="color: var(--gray-500);">对方分数</p>
+                    <div class="match-score" id="match-score"></div>
+                    <p style="margin-bottom: 12px; color: var(--gray-500);">对方二维码</p>
+                    <div class="match-qrcode">
+                        <img id="match-qrcode-img" src="" alt="对方二维码">
+                    </div>
+                    <p class="form-hint" style="margin-top: 16px;">
+                        请扫描上方二维码完成互助
+                    </p>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="goHome()" style="width: 100%;">完成</button>
+        </div>
+    </div>
+
+    <script>
+        let currentType = '';
+        let currentUUID = '';
+        let qrcodeBase64 = '';
+        let pollInterval = null;
+        let countdownInterval = null;
+        let countdownValue = 30;
+        let config = {
+            target_score: 2026,
+            fuzzy_min: 2024,
+            fuzzy_max: 2028
+        };
+
+        async function loadConfig() {
+            try {
+                const res = await fetch('/api/config');
+                const data = await res.json();
+                if (data.code === 0 && data.data) {
+                    config = data.data;
+                    document.getElementById('target-score').textContent = config.target_score;
+                }
+            } catch (e) {
+                console.error('加载配置失败:', e);
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+        }
+
+        function selectType(type) {
+            currentType = type;
+            const indicator = document.getElementById('form-type-indicator');
+            indicator.className = 'type-indicator ' + type;
+            indicator.textContent = type === 'team' ? '队伍找人' : '人找队伍';
+
+            document.getElementById('score-input').value = '';
+            document.getElementById('mode-exact').checked = true;
+            document.getElementById('qrcode-preview').style.display = 'none';
+            document.getElementById('upload-placeholder').style.display = 'block';
+            document.getElementById('upload-area').classList.remove('has-image');
+            document.getElementById('error-container').innerHTML = '';
+            qrcodeBase64 = '';
+            updateSubmitButton();
+            updateNeedScoreHint();
+
+            showPage('form');
+        }
+
+        function updateNeedScoreHint() {
+            const scoreInput = document.getElementById('score-input');
+            const hint = document.getElementById('need-score-hint');
+            const score = parseInt(scoreInput.value) || 0;
+
+            if (score > 0) {
+                const need = config.target_score - score;
+                if (need > 0) {
+                    hint.textContent = `需要找分数为 ${need} 的${currentType === 'team' ? '个人' : '队伍'}`;
+                } else if (need === 0) {
+                    hint.textContent = '分数已满，无需配对';
+                } else {
+                    hint.textContent = `分数超出目标 ${-need} 分`;
+                }
+            } else {
+                hint.textContent = '';
+            }
+        }
+
+        function handleImageUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // 验证文件类型
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                showError('只支持 PNG、JPG、GIF 格式的图片');
+                input.value = '';
+                return;
+            }
+
+            // 验证文件大小 (最大 2MB)
+            const maxSize = 2 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showError('图片大小不能超过 2MB');
+                input.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                qrcodeBase64 = e.target.result;
+                const preview = document.getElementById('qrcode-preview');
+                preview.src = qrcodeBase64;
+                preview.style.display = 'block';
+                document.getElementById('upload-placeholder').style.display = 'none';
+                document.getElementById('upload-area').classList.add('has-image');
+                document.getElementById('error-container').innerHTML = '';
+                updateSubmitButton();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateSubmitButton() {
+            const score = document.getElementById('score-input').value;
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = !(score && qrcodeBase64);
+        }
+
+        document.getElementById('score-input').addEventListener('input', function() {
+            updateSubmitButton();
+            updateNeedScoreHint();
+        });
+
+        function showError(msg) {
+            document.getElementById('error-container').innerHTML =
+                `<div class="error-msg">${msg}</div>`;
+        }
+
+        async function submitForm() {
+            const score = parseInt(document.getElementById('score-input').value);
+            const matchMode = document.querySelector('input[name="match-mode"]:checked').value;
+
+            if (isNaN(score) || !qrcodeBase64) {
+                showError('请填写完整信息');
+                return;
+            }
+
+            if (score < 0 || score > 2026) {
+                showError('分数必须在 0-2026 之间');
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.textContent = '提交中...';
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: currentType,
+                        score: score,
+                        match_mode: matchMode,
+                        qrcode_image: qrcodeBase64
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.code !== 0) {
+                    showError(data.message || '提交失败');
+                    btn.disabled = false;
+                    btn.textContent = '提交';
+                    return;
+                }
+
+                currentUUID = data.data.uuid;
+
+                if (data.data.status === 'matched') {
+                    showMatchResult(data.data.match_info);
+                } else {
+                    startWaiting();
+                }
+            } catch (e) {
+                showError('网络错误，请重试');
+                btn.disabled = false;
+                btn.textContent = '提交';
+            }
+        }
+
+        function startWaiting() {
+            document.getElementById('user-uuid').textContent = currentUUID;
+            showPage('waiting');
+            startPolling();
+        }
+
+        function startPolling() {
+            countdownValue = 30;
+            updateCountdown();
+
+            countdownInterval = setInterval(() => {
+                countdownValue--;
+                updateCountdown();
+                if (countdownValue <= 0) {
+                    countdownValue = 30;
+                    checkStatus();
+                }
+            }, 1000);
+
+            checkStatus();
+        }
+
+        function updateCountdown() {
+            document.getElementById('countdown-text').textContent =
+                `${countdownValue}秒后自动刷新`;
+        }
+
+        async function checkStatus() {
+            try {
+                const res = await fetch(`/api/status/${currentUUID}`);
+                const data = await res.json();
+
+                if (data.code === 0 && data.data.status === 'matched') {
+                    stopPolling();
+                    showMatchResult(data.data.match_info);
+                }
+            } catch (e) {
+                console.error('检查状态失败:', e);
+            }
+        }
+
+        function stopPolling() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+        }
+
+        function showMatchResult(matchInfo) {
+            document.getElementById('match-score').textContent = matchInfo.score;
+            document.getElementById('match-qrcode-img').src = matchInfo.qrcode_path;
+            showPage('success');
+        }
+
+        function goHome() {
+            stopPolling();
+            currentType = '';
+            currentUUID = '';
+            qrcodeBase64 = '';
+            document.getElementById('score-input').value = '';
+            document.getElementById('qrcode-input').value = '';
+            document.getElementById('submit-btn').textContent = '提交';
+            document.getElementById('submit-btn').disabled = true;
+            document.getElementById('query-uuid-input').value = '';
+            document.getElementById('query-result-container').innerHTML = '';
+            showPage('home');
+        }
+
+        // 公告弹窗
+        function showAnnouncement() {
+            document.getElementById('announcement-modal').classList.remove('hidden');
+        }
+
+        function closeAnnouncement() {
+            document.getElementById('announcement-modal').classList.add('hidden');
+        }
+
+        // 查询功能
+        async function queryStatus() {
+            const uuid = document.getElementById('query-uuid-input').value.trim();
+            if (!uuid) {
+                showQueryResult('error', '请输入 UUID');
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/status/${uuid}`);
+                const data = await res.json();
+
+                if (data.code === 404) {
+                    showQueryResult('error', 'UUID 不存在，请检查输入');
+                    return;
+                }
+
+                if (data.code !== 0) {
+                    showQueryResult('error', data.message || '查询失败');
+                    return;
+                }
+
+                if (data.data.status === 'matched') {
+                    showMatchResult(data.data.match_info);
+                } else {
+                    // pending 状态，进入等待页面
+                    currentUUID = uuid;
+                    startWaiting();
+                }
+            } catch (e) {
+                showQueryResult('error', '网络错误，请重试');
+            }
+        }
+
+        function showQueryResult(type, message, matchInfo) {
+            const container = document.getElementById('query-result-container');
+            let html = `<div class="query-result ${type}"><h4>${message}</h4>`;
+
+            if (type === 'matched' && matchInfo) {
+                html += `<p>对方分数：<strong>${matchInfo.score}</strong></p>`;
+                html += `<button class="btn view-match-btn" onclick="viewMatchFromQuery()">查看对方二维码</button>`;
+                window.tempMatchInfo = matchInfo;
+            } else if (type === 'pending') {
+                html += `<p>系统正在为你寻找合适的匹配对象，请耐心等待</p>`;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function viewMatchFromQuery() {
+            if (window.tempMatchInfo) {
+                showMatchResult(window.tempMatchInfo);
+            }
+        }
+
+        // 初始化
+        loadConfig();
+    </script>
+</body>
+</html>

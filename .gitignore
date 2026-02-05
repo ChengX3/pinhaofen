@@ -1,0 +1,27 @@
+# 编译产物
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# 上传的图片
+uploads/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 临时文件
+*.log
+*.tmp
+nul
+
+# 本地配置（如果包含敏感信息）
+# config.yaml

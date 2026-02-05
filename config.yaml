@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+database:
+  host: localhost
+  port: 3306
+  user: root
+  password: "root"
+  name: huzhu
+
+match:
+  target_score: 2026
+  fuzzy_min: 2024
+  fuzzy_max: 2028
+
+qrcode:
+  valid_url_prefix: "https://u.alipay.cn/"
+  upload_dir: "./uploads"
+  max_per_day_ip: 3
